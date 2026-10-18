@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en" class="dark" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkTrust — URL Trust & Security Intelligence</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="Logo/logo.png">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="min-h-screen flex flex-col relative selection:bg-brand-600 selection:text-white">
+
+    <div class="ambient-glow w-[500px] h-[500px] bg-brand-600 top-0 left-1/2 -translate-x-1/2"></div>
+    <div class="ambient-glow w-[400px] h-[400px] bg-blue-600 top-96 right-10"></div>
+
+    <header class="border-b sticky top-0 z-50 nav-bg backdrop-blur-xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between relative z-10">
+            
+            <a href="#" class="flex items-center gap-3.5 group">
+                <img src="Logo/logo.png" alt="LinkTrust Logo" class="w-10 h-10 rounded-xl shadow-md transition-transform group-hover:scale-105 select-none object-cover">
+                <span class="font-extrabold text-2xl tracking-tight heading-text flex items-center">
+                    Link<span class="text-brand-600 dark:text-brand-400">Trust</span>
+                </span>
+            </a>
+
+            <div class="flex items-center gap-3">
+                <div class="relative">
+                    <select id="langSelect" class="appearance-none bg-slate-200 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 text-xs font-semibold px-3 py-2 pr-7 rounded-xl focus:outline-none cursor-pointer text-slate-800 dark:text-slate-200">
+                        <option value="en" selected>🇬🇧 EN</option>
+                        <option value="fr">🇫🇷 FR</option>
+                        <option value="es">🇪🇸 ES</option>
+                        <option value="de">🇩🇪 DE</option>
+                        <option value="ar">🇸🇦 AR</option>
+                    </select>
+                    <i class="fa-solid fa-chevron-down absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] pointer-events-none text-slate-500"></i>
+                </div>
+
+                <button id="themeToggle" class="p-2.5 rounded-xl bg-slate-200 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 text-slate-800 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-800 transition-all" title="Toggle Theme"><i class="fa-solid fa-moon text-base dark:hidden"></i><i class="fa-solid fa-sun text-base hidden dark:block text-amber-400"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12 relative z-10">
+
+        <section class="text-center max-w-3xl mx-auto space-y-6 pt-4">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400 text-xs font-bold tracking-wide">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span data-i18n="badge">HTTPS protects connection, not legitimacy</span>
+            </div>
+            
+            <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight heading-text leading-[1.15]">
+                <span data-i18n="heroTitle">Analyze link trustworthiness</span> <span class="text-brand-600 dark:text-brand-400" data-i18n="heroTitleHighlight">in seconds</span>
+            </h1>
+            
+            <p class="sub-text text-base sm:text-lg max-w-2xl mx-auto font-normal" data-i18n="heroSub">
+                Instantly detect phishing traps, typosquatting, and hidden redirects before clicking.</p>
+
+            <form id="urlForm" class="mt-8">
+                <div class="relative flex flex-col sm:flex-row gap-2.5 p-2.5 rounded-2xl input-container border transition-all shadow-sm">
+                    <div class="relative flex-1 flex items-center">
+                        <i class="fa-solid fa-link absolute left-4 text-slate-400 text-base"></i>
+                        <input type="text" id="urlInput" data-i18n-ph="inputPlaceholder" placeholder="Paste or type URL to verify (e.g. https://paypal-security.com)..." class="w-full pl-11 pr-10 py-3.5 bg-transparent heading-text placeholder-slate-400 focus:outline-none text-sm sm:text-base font-mono" required>
+                        <button type="button" id="clearBtn" class="hidden absolute right-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1">
+                            <i class="fa-solid fa-xmark text-lg"></i>
+                        </button>
+                    </div>
+                    <button type="submit" id="analyzeBtn" class="px-8 py-3.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl shadow-lg shadow-brand-600/20 transition-all flex items-center justify-center gap-2 active:scale-[0.98] disabled:opacity-50 text-sm sm:text-base cursor-pointer">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <span data-i18n="btnAnalyze">Analyze</span>
+                    </button>
+                </div>
+            </form>
+
+            <div class="flex flex-wrap items-center justify-center gap-2 pt-2">
+                <span class="text-xs sub-text font-medium mr-1" data-i18n="quickExamples">Quick tests:</span>
+                <button onclick="loadExample('https://en.wikipedia.org/wiki/Computer_security')" class="text-xs px-3 py-1.5 rounded-xl bg-slate-200 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 text-slate-800 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-800 transition-all font-medium">
+                    🟢 Wikipedia
+                </button>
+                <button onclick="loadExample('https://paypa1-security-verify-login.com/account/update')" class="text-xs px-3 py-1.5 rounded-xl bg-slate-200 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 text-slate-800 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-800 transition-all font-medium">
+                    🔴 Paypal Phishing
+                </button>
+                <button onclick="loadExample('https://bit.ly/3xXyZ99')" class="text-xs px-3 py-1.5 rounded-xl bg-slate-200 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 text-slate-800 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-800 transition-all font-medium">
+                    🟡 Bit.ly Shortener
+                </button>
+            </div>
+        </section>
+
+        <div id="loadingState" class="hidden max-w-4xl mx-auto py-16 text-center space-y-6">
+            <div class="relative w-16 h-16 mx-auto">
+                <div class="absolute inset-0 rounded-full border-4 border-brand-500/20 border-t-brand-600 animate-spin"></div>
+            </div>
+            <div class="space-y-2">
+                <h3 class="text-xl font-bold heading-text" id="loadingText" data-i18n="loadingTitle">Analyzing...</h3>
+                <p class="text-sm sub-text" data-i18n="loadingSub">Checking WHOIS, DNS reputation, and URL structure...</p>
+            </div>
+        </div>
+
+        <div id="resultsContainer" class="hidden space-y-8 max-w-5xl mx-auto">
+
+            <div class="p-6 sm:p-8 rounded-3xl glass-card relative overflow-hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    
+                    <div class="lg:col-span-4 flex flex-col items-center justify-center text-center border-b lg:border-b-0 lg:border-r border-slate-200 dark:border-slate-800 pb-6 lg:pb-0 lg:pr-8">
+                        <div class="relative w-40 h-40 flex items-center justify-center">
+                            <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="42" stroke-width="8" class="stroke-slate-200 dark:stroke-slate-800" fill="transparent" />
+                                <circle id="scoreCircle" cx="50" cy="50" r="42" stroke-width="8" stroke-dasharray="263.89" stroke-dashoffset="263.89" stroke-linecap="round" fill="transparent" />
+                            </svg>
+                            <div class="absolute flex flex-col items-center justify-center">
+                                <span id="scoreValue" class="text-4xl font-extrabold tracking-tight heading-text">0</span>
+                                <span class="text-[10px] uppercase tracking-widest sub-text font-bold mt-1">Score / 100</span>
+                            </div>
+                        </div>
+                        <div id="scoreLabel" class="mt-4 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider">
+                            --
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-8 space-y-4">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <span class="text-xs sub-text font-mono uppercase tracking-wider" data-i18n="reportTitle">Analysis Report</span>
+                            <span id="analysisTimestamp" class="text-xs sub-text font-mono"></span>
+                        </div>
+
+                        <div>
+                            <h2 id="verdictTitle" class="text-2xl sm:text-3xl font-extrabold heading-text">--</h2>
+                            <p id="verdictDescription" class="sub-text text-sm sm:text-base mt-2 leading-relaxed">--</p>
+                        </div>
+
+                        <div class="p-3.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-mono flex flex-wrap items-center gap-4">
+                            <div class="flex items-center gap-1.5 sub-text">
+                                <i class="fa-solid fa-globe"></i> <span data-i18n="lblDomain">Domain</span> :
+                                <span id="parsedDomain" class="font-bold heading-text">--</span>
+                            </div>
+                            <div class="flex items-center gap-1.5 sub-text">
+                                <i class="fa-solid fa-lock" id="protocolIcon"></i> <span data-i18n="lblProtocol">Protocol</span> :
+                                <span id="parsedProtocol" class="font-bold heading-text">--</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <h3 class="text-lg font-bold heading-text flex items-center gap-2">
+                    <i class="fa-solid fa-layer-group text-brand-600 dark:text-brand-400"></i>
+                    <span data-i18n="criteriaTitle">Multi-Criteria Analysis</span>
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="criteriaGrid"></div>
+            </div>
+
+            <div id="recommendationBox" class="p-6 rounded-2xl border flex items-start gap-4 transition-all">
+                <div id="recIcon" class="p-3 rounded-xl text-xl flex-shrink-0"></div>
+                <div class="space-y-1">
+                    <h4 id="recTitle" class="font-bold text-base">--</h4>
+                    <p id="recText" class="text-sm leading-relaxed"></p>
+                </div>
+            </div>
+        </div>
+
+        <section class="pt-10 border-t border-slate-200 dark:border-slate-800 space-y-8">
+            <div class="text-center max-w-3xl mx-auto space-y-3">
+                <h2 class="text-2xl sm:text-3xl font-extrabold heading-text" data-i18n="eduTitle">
+                    Why HTTPS is not enough?
+                </h2>
+                <p class="sub-text text-sm sm:text-base leading-relaxed" data-i18n="eduSub">
+                    The padlock icon only means your connection is encrypted. It does not prove who owns the website.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="p-6 rounded-2xl glass-card space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-brand-500/10 text-brand-600 dark:text-brand-400 flex items-center justify-center font-bold">
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+                    <h3 class="text-lg font-bold heading-text" data-i18n="card1Title">Encryption (HTTPS)</h3>
+                    <p class="sub-text text-sm leading-relaxed" data-i18n="card1Desc">
+                        Prevents third parties (like someone on public Wi-Fi) from stealing your password in transit.
+                    </p>
+                </div>
+
+                <div class="p-6 rounded-2xl glass-card space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center font-bold">
+                        <i class="fa-solid fa-user-ninja"></i>
+                    </div>
+                    <h3 class="text-lg font-bold heading-text" data-i18n="card2Title">Recipient Legitimacy</h3>
+                    <p class="sub-text text-sm leading-relaxed" data-i18n="card2Desc">
+                        Hackers get free HTTPS certificates instantly. Sending passwords to a phishing site over HTTPS securely delivers it to the hacker!
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="border-t border-slate-200 dark:border-slate-800 mt-20 py-8 text-center text-xs sub-text">
+        <p class="font-medium">LinkTrust — URL Trust Intelligence Platform</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
