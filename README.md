@@ -64,7 +64,3 @@ Pour faire évoluer ce prototype client vers une plateforme SaaS d'entreprise, i
 | **urlscan.io** | Capture d'écran sécurisée et analyse du code JS de la page cible. |
 
 ---
-
-## 📄 Licence
-
-Projet distribué sous la licence **MIT**.
